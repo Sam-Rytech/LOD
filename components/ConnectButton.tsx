@@ -1,11 +1,9 @@
 'use client'
 
-import { Web3Button } from '@web3modal/react'
-
-export default function ConnectWallet() {
+export default function ConnectButton() {
   return (
-    <div className="flex justify-center mt-6">
-      <Web3Button />
+    <div className="flex justify-center">
+      <w3m-button />
     </div>
   )
 }
