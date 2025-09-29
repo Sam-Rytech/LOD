@@ -3,36 +3,39 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider, createConfig, http } from 'wagmi'
-import { base } from 'wagmi/chains'
-import { createAppKit, WagmiAdapter } from '@reown/appkit'
+import { createAppKit } from '@reown/appkit'
+import { base } from '@reown/appkit/networks' // import network from AppKit’s networks
 
-// Query client for react-query
-const queryClient = new QueryClient()
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
+if (!projectId) {
+  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID not set')
+}
 
 // 1. Create wagmi config
 const wagmiConfig = createConfig({
   chains: [base],
   transports: {
-    [base.id]: http('https://mainnet.base.org'), // your RPC here
+    [base.id]: http('https://base-rpc-url-here'), // your RPC URL or public provider
   },
 })
 
-// 2. Create wagmi adapter for AppKit
-const wagmiAdapter = new WagmiAdapter({
-  wagmiConfig,
-})
-
-// 3. Initialize AppKit
+// 2. Initialize AppKit
 createAppKit({
-  adapters: [wagmiAdapter],
+  adapters: [
+    /* e.g. default adapter provided by AppKit or a specific adapter */
+  ],
+  projectId,
+  networks: [base], // **this is required** per the error you got
   metadata: {
-    name: 'Base Faucet DApp',
-    description: 'Simple faucet on Base Mainnet',
-    url: 'https://yourdapp.com',
-    icons: ['https://yourdapp.com/icon.png'],
+    name: 'LOD Faucet',
+    description: 'Claim free LOD tokens',
+    url: 'https://yourfaucet.xyz',
+    icons: ['https://yourfaucet.xyz/logo.png'],
   },
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!, // from WalletConnect Cloud
+  // you can also pass `features` or other options if needed
 })
+
+const queryClient = new QueryClient()
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
