@@ -1,11 +1,13 @@
+// app/providers.tsx
 'use client'
 
-import { WagmiProvider, createConfig, http } from 'wagmi'
+import { WagmiConfig, createClient, configureChains } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
 import { base } from 'wagmi/chains'
+import { createAppKit } from '@reown/appkit'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createAppKit, defaultWagmiConfig } from '@reown/appkit'
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID! // from WalletConnect Cloud
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
 const metadata = {
   name: 'LOD Faucet',
   description: 'Claim free LOD tokens',
@@ -14,15 +16,33 @@ const metadata = {
 }
 
 const chains = [base]
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
-createAppKit({ adapters: [wagmiConfig], projectId, metadata })
+const {
+  chains: configuredChains,
+  provider,
+  webSocketProvider,
+} = configureChains(chains, [publicProvider()])
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  provider,
+  webSocketProvider,
+  connectors: [], // connectors will be handled via AppKit
+})
+
+createAppKit({
+  projectId,
+  metadata,
+  chains: configuredChains,
+  wagmiClient,
+  // you may specify adapters or features here per docs
+})
 
 const queryClient = new QueryClient()
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiConfig client={wagmiClient}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
+    </WagmiConfig>
   )
 }
