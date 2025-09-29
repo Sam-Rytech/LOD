@@ -5,8 +5,8 @@ import { useAccount, useWriteContract, useReadContract } from 'wagmi'
 import faucetABI from '../abi/FaucetLOD.json'
 import tokenABI from '../abi/LonradToken.json'
 
-const faucetAddress = '0xYourFaucetContract' // Replace with deployed address
-const tokenAddress = '0xYourTokenContract' // Replace with deployed address
+const faucetAddress = '0x8e5771f587d626ac68e962d0582Ed717074567ab' 
+const tokenAddress = '0xE48A480171E6877a4632c3d588DeC89AAE002800' 
 
 export default function Faucet() {
   const { address, isConnected } = useAccount()
