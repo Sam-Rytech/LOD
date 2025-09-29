@@ -2,14 +2,20 @@
 
 import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useReadContract } from 'wagmi'
-import faucetABI from '../abi/FaucetLOD.json'
-import tokenABI from '../abi/LonradToken.json'
+import { Abi } from 'viem'
 
-const faucetAddress = '0x8e5771f587d626ac68e962d0582Ed717074567ab' 
-const tokenAddress = '0xE48A480171E6877a4632c3d588DeC89AAE002800' 
+// ⬇️ Import and extract only the ABI field
+import faucetJson from '../abi/FaucetLOD.json'
+import tokenJson from '../abi/LonradToken.json'
+
+const faucetABI = faucetJson.abi as Abi
+const tokenABI = tokenJson.abi as Abi
+
+const faucetAddress = '0x8e5771f587d626ac68e962d0582Ed717074567ab'
+const tokenAddress = '0xE48A480171E6877a4632c3d588DeC89AAE002800'
 
 export default function Faucet() {
-  const { address, isConnected } = useAccount()
+  const { isConnected } = useAccount()
   const { writeContract, isPending } = useWriteContract()
 
   const [drip, setDrip] = useState('0')
