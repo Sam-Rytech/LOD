@@ -38,5 +38,9 @@ createAppKit({
 const queryClient = new QueryClient()
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </WagmiProvider>
+  )
 }
