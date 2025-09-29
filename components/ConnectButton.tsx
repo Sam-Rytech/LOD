@@ -1,19 +1,11 @@
 'use client'
 
-import { useAccount } from 'wagmi'
+import { Web3Button } from '@web3modal/react'
 
-export default function ConnectButton() {
-  const { address, isConnected } = useAccount()
-
+export default function ConnectWallet() {
   return (
-    <div className="flex items-center gap-2">
-      {/* Web3Modal button from AppKit */}
-      <w3m-button />
-      {isConnected && (
-        <span className="text-sm text-gray-500">
-          Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
-        </span>
-      )}
+    <div className="flex justify-center mt-6">
+      <Web3Button />
     </div>
   )
 }
