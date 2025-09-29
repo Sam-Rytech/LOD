@@ -42,9 +42,15 @@ export default function Faucet() {
   })
 
   useEffect(() => {
-    if (dripAmount) setDrip(formatUnits(BigInt(dripAmount), 18))
-    if (cooldownTime) setCooldown(cooldownTime.toString())
-    if (faucetBalance) setBalance(formatUnits(BigInt(faucetBalance), 18))
+    if (typeof dripAmount === 'string' || typeof dripAmount === 'number' || typeof dripAmount === 'bigint') {
+      setDrip(formatUnits(BigInt(dripAmount), 18))
+    }
+    if (typeof cooldownTime === 'string' || typeof cooldownTime === 'number' || typeof cooldownTime === 'bigint') {
+      setCooldown(cooldownTime.toString())
+    }
+    if (typeof faucetBalance === 'string' || typeof faucetBalance === 'number' || typeof faucetBalance === 'bigint') {
+      setBalance(formatUnits(BigInt(faucetBalance), 18))
+    }
   }, [dripAmount, cooldownTime, faucetBalance])
 
   const claim = async () => {
