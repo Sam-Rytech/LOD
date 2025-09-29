@@ -1,36 +1,42 @@
+// app/providers.tsx
 'use client'
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { base } from 'wagmi/chains'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createAppKit } from '@reown/appkit'
+import { createAppKit, WagmiAdapter } from '@reown/appkit'
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
-
-const config = createConfig({
-  chains: [base],
-  transports: {
-    [base.id]: http(), // defaults to public RPC
-  },
-})
-
-// Initialize AppKit once
-createAppKit({
-  projectId,
-  wagmiConfig: config,
-  metadata: {
-    name: 'LOD Faucet',
-    description: 'Claim free LOD tokens',
-    url: 'https://yourfaucet.xyz',
-    icons: ['https://yourfaucet.xyz/logo.png'],
-  },
-})
-
+// Query client for react-query
 const queryClient = new QueryClient()
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+// 1. Create wagmi config
+const wagmiConfig = createConfig({
+  chains: [base],
+  transports: {
+    [base.id]: http('https://mainnet.base.org'), // your RPC here
+  },
+})
+
+// 2. Create wagmi adapter for AppKit
+const wagmiAdapter = new WagmiAdapter({
+  wagmiConfig,
+})
+
+// 3. Initialize AppKit
+createAppKit({
+  adapters: [wagmiAdapter],
+  metadata: {
+    name: 'Base Faucet DApp',
+    description: 'Simple faucet on Base Mainnet',
+    url: 'https://yourdapp.com',
+    icons: ['https://yourdapp.com/icon.png'],
+  },
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!, // from WalletConnect Cloud
+})
+
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   )
