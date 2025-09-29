@@ -1,43 +1,38 @@
-// app/providers.tsx
 'use client'
-import React from 'react'
+
+import { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { createAppKit } from '@reown/appkit'
-import { base } from '@reown/appkit/networks' // import network from AppKit’s networks
+import { base } from '@reown/appkit/networks'
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
-if (!projectId) {
-  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID not set')
-}
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+if (!projectId) throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID not set')
 
-// 1. Create wagmi config
+// 1️⃣ Wagmi config
 const wagmiConfig = createConfig({
-  chains: [base],
   transports: {
-    [base.id]: http('https://base-rpc-url-here'), // your RPC URL or public provider
+    [base.id]: http('https://mainnet.base.rpc.url'), // Replace with your Base RPC
   },
+  chains: [base],
 })
 
-// 2. Initialize AppKit
+// 2️⃣ Initialize AppKit once
 createAppKit({
-  adapters: [
-    /* e.g. default adapter provided by AppKit or a specific adapter */
-  ],
   projectId,
-  networks: [base], // **this is required** per the error you got
+  networks: [base],
   metadata: {
     name: 'LOD Faucet',
-    description: 'Claim free LOD tokens',
+    description: 'Claim free LOD tokens on Base',
     url: 'https://yourfaucet.xyz',
     icons: ['https://yourfaucet.xyz/logo.png'],
   },
-  // you can also pass `features` or other options if needed
+  adapters: [], // you can use default adapter or wagmiAdapter if needed
 })
 
 const queryClient = new QueryClient()
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
