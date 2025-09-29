@@ -1,9 +1,12 @@
+// app/layout.tsx
+import type { Metadata } from 'next'
+// Make sure app/providers.tsx exists, or update the path if needed
+import { Providers } from './providers'
 import './globals.css'
-import Providers from './providers'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'LOD Faucet',
-  description: 'Claim free LOD tokens',
+  description: 'Claim free LOD tokens on Base',
 }
 
 export default function RootLayout({
@@ -13,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-100 min-h-screen flex items-center justify-center">
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
