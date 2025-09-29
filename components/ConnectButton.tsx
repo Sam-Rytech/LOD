@@ -1,9 +1,11 @@
 'use client'
 
+import { Web3Button } from '@web3modal/react'
+
 export default function ConnectButton() {
   return (
     <div className="flex justify-center">
-      <w3m-button />
+      <Web3Button />
     </div>
   )
 }
