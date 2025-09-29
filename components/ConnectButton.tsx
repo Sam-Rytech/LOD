@@ -7,6 +7,7 @@ export default function ConnectButton() {
 
   return (
     <div className="flex items-center gap-2">
+      {/* Web3Modal button from AppKit */}
       <w3m-button />
       {isConnected && (
         <span className="text-sm text-gray-500">
