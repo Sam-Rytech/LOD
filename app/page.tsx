@@ -1,10 +1,8 @@
-import ConnectButton from '../components/ConnectButton'
-import Faucet from '../components/Faucet'
+import Faucet from '@/components/Faucet'
 
-export default function Page() {
+export default function FaucetPage() {
   return (
-    <main className="flex flex-col gap-6 items-center justify-center py-10">
-      <ConnectButton />
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <Faucet />
     </main>
   )

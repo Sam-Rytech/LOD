@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useReadContract } from 'wagmi'
 import { formatUnits } from 'viem' // to format token decimals
+import { Web3Modal } from '@web3modal/react'
 
 import faucetJson from '../abi/FaucetLOD.json'
 import tokenJson from '../abi/LonradToken.json'
@@ -45,9 +46,15 @@ export default function Faucet() {
 
   // Update UI state
   useEffect(() => {
-    if (dripAmount) setDrip(formatUnits(BigInt(dripAmount), 18))
-    if (cooldownTime) setCooldown(cooldownTime.toString())
-    if (faucetBalance) setBalance(formatUnits(BigInt(faucetBalance), 18))
+    if (typeof dripAmount === 'string' || typeof dripAmount === 'number' || typeof dripAmount === 'bigint') {
+      setDrip(formatUnits(BigInt(dripAmount), 18))
+    }
+    if (typeof cooldownTime === 'string' || typeof cooldownTime === 'number' || typeof cooldownTime === 'bigint') {
+      setCooldown(cooldownTime.toString())
+    }
+    if (typeof faucetBalance === 'string' || typeof faucetBalance === 'number' || typeof faucetBalance === 'bigint') {
+      setBalance(formatUnits(BigInt(faucetBalance), 18))
+    }
   }, [dripAmount, cooldownTime, faucetBalance])
 
   // Claim faucet tokens
@@ -71,7 +78,7 @@ export default function Faucet() {
           <p className="text-gray-500 mb-2">
             Connect wallet to claim LOD tokens
           </p>
-          <w3m-button />
+          <Web3Modal projectId="f579285fe2d1f128b9a30434426c3a6b" />
         </div>
       ) : (
         <>
